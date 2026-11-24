@@ -1,0 +1,21 @@
+{
+  "name": "game-layer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "littlejsengine": "^1.31.0",
+    "msw": "2.15.0"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vite": "^6.3.0",
+    "vitest": "^3.2.0"
+  }
+}

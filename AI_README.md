@@ -1,0 +1,9 @@
+# Implementation guide
+
+Use vanilla JavaScript modules, Vite and LittleJS. Keep business logic and geometry in `src/utils`, DOM controls in `src/components`, screen composition in `src/scenes`, and all system-facing operations behind `src/api`. `src/api/index.js` selects the backend: implement the same `isPortrait()`, `getCredentials()`, `setCredentials({ username, password })`, `getStatus()` methods for additional connectors. The web connector stores **only** the username; never save or return a password.
+
+The LittleJS engine is initialized once by the active scene; pass its root element so its canvas stays below the DOM browser layer. Use `src/utils/viewport.js` and `backend.isPortrait()` when sizing it on startup and resize. Render game text using the locally hosted Inter font from `src/assets/fonts`; CSS uses the same family. Keep interactive browser controls accessible and in the lower part of the viewport. Extend `src/components/ninePatch.js` to add ornament styles; it produces an SVG border image with non-stretched corners, while `skin.js` controls fill and stroke.
+
+Shared `src/utils/memory.js` holds the scene name and user-visible error. Subscribe to state for UI updates and unsubscribe when removing a scene. Surface HTTP, startup and storage failures instead of treating them as success. Login/Create currently only validate both inputs and save the username; do not imply they authenticate.
+
+Keep MSW scenarios and developer controls in `mocks/`; the worker file is served at `/mockServiceWorker.js` by Vite's development-only middleware, not copied into the production build. Add focused Vitest tests beside logic, component and scene code; use `// @vitest-environment jsdom` for browser UI tests, and `msw/node` for HTTP scenarios. Do not rely on a full-app snapshot. Update `README.md`, `AI_README.md`, `API_README.md` and `MOCK_README.md` whenever their respective behavior changes.

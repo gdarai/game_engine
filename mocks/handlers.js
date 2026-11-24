@@ -1,24 +1,21 @@
 import { http, HttpResponse } from 'msw'
-import { getActiveKeys } from '@mocks/mode'
-import { getMockMemory, updateMockMemory } from '@mocks/memory'
-//import create from '@mocks/new/create'
+import { getActiveKeys } from './mode.js'
+import { getMockMemory, updateMockMemory } from './memory.js'
+import status from './status.js'
 
-function gameEndpoint(path, scenarios) {
+function mockEndpoint(path, scenarios) {
   if (typeof scenarios.default !== 'function') {
     throw new TypeError(`Mock API ${path} requires a default handler`)
   }
 
-  return http.post(`*/api${path}`, async ({ request }) => {
-    const keys = getActiveKeys()
-    const key = keys.reverse().find((active) => Object.hasOwn(scenarios, active)) ?? 'default'
-    const text = await request.text()
-    const apiBody = text ? JSON.parse(text) : {}
-    const [returnCode, returnBody, toMemory] = await scenarios[key](apiBody, getMockMemory())
+  return http.get(`*/api${path}`, async () => {
+    const key = getActiveKeys().reverse().find((active) => Object.hasOwn(scenarios, active)) ?? 'default'
+    const [returnCode, returnBody, toMemory] = await scenarios[key]({}, getMockMemory())
     updateMockMemory(toMemory)
     return HttpResponse.json(returnBody, { status: returnCode })
   })
 }
 
-export const gameHandlers = [
-  //gameEndpoint('/new/create', create),
+export const appHandlers = [
+  mockEndpoint('/status', status),
 ]

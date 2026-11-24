@@ -1,0 +1,124 @@
+@font-face {
+  font-family: Inter;
+  src: url('@assets/fonts/inter-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url('@assets/fonts/inter-latin-600.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  font-family: Inter, sans-serif;
+  color: #e7f5fa;
+  background: #05131e;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; }
+
+#app {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.game-viewport {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: #0c2538;
+}
+
+.canvas-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.browser-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5, 19, 30, .98), rgba(5, 19, 30, .9) 32%, transparent 58%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 5% min(1.5%, 6px);
+  pointer-events: none;
+}
+
+.login-form {
+  width: min(100%, 380px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: clamp(2px, .6vh, 6px);
+  pointer-events: auto;
+}
+
+.login-form h1 {
+  font-size: clamp(18px, 2.5vh, 26px);
+  margin: 0;
+  text-align: center;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: clamp(12px, 1.5vh, 15px);
+}
+
+.form-fields { display: flex; flex-direction: column; gap: clamp(2px, .6vh, 6px); }
+.form-fields .input-field { min-width: 0; }
+
+.nine-patch {
+  border: 12px solid transparent;
+  border-image-slice: 12;
+  border-image-width: 12px;
+  border-image-repeat: stretch;
+  color: inherit;
+  font: inherit;
+}
+
+.input-field input, .form-actions button {
+  min-width: 0;
+  height: clamp(38px, 5vh, 50px);
+}
+
+.input-field input {
+  width: 100%;
+  outline-offset: 2px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-actions button {
+  flex: 1;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.nine-patch:focus-visible { outline: 2px solid #fff; }
+.form-error { margin: 0; color: #ffb8ad; font-size: 13px; }
+.form-error[hidden] { display: none; }
+
+@media (orientation: landscape) {
+  .form-fields { flex-direction: row; }
+  .form-fields .input-field { flex: 1; }
+}
+
+@media (orientation: landscape) and (max-height: 400px) {
+  .login-form h1 { font-size: 12px; line-height: 1; }
+}

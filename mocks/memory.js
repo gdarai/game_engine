@@ -1,8 +1,6 @@
-import * as playTest from '@mockFixtures/playTest';
-
 export const memoryStates = {
-  test1: {
-    someData: 'test1',
+  checked: {
+    statusChecks: 1,
   },
 }
 

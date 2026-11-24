@@ -1,5 +1,5 @@
 import { setupWorker } from 'msw/browser'
-import { gameHandlers } from '@mocks/handlers'
-import { mockControlHandlers } from '@mocks/controls'
+import { appHandlers } from './handlers.js'
+import { mockControlHandlers } from './controls.js'
 
-export const worker = setupWorker(...mockControlHandlers, ...gameHandlers)
+export const worker = setupWorker(...mockControlHandlers, ...appHandlers)

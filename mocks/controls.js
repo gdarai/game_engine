@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
-import { addKey, removeKey, clearKeys } from '@mocks/mode'
-import { getMockMemory, memoryStates, resetMemory } from '@mocks/memory'
+import { addKey, removeKey, clearKeys } from './mode.js'
+import { getMockMemory, memoryStates, resetMemory } from './memory.js'
 
 async function readBody(request) {
   const text = await request.text()

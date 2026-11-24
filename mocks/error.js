@@ -1,3 +1,3 @@
 export function error() {
-  return [400, { message: 'test error', details: 'Additional information about the test error.' }]
+  return [503, { message: 'Mock service unavailable' }]
 }
