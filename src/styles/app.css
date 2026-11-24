@@ -81,9 +81,6 @@ body { margin: 0; }
 .form-fields .input-field { min-width: 0; }
 
 .nine-patch {
-  border: 12px solid transparent;
-  border-image-slice: 12;
-  border-image-width: 12px;
   border-image-repeat: stretch;
   color: inherit;
   font: inherit;

@@ -15,12 +15,12 @@ function setup() {
   return { backend, view }
 }
 
-it('renders accessible controls with the SVG skin in the form', () => {
+it('renders accessible controls with the bundled SVG skin in the form', () => {
   const { view } = setup()
   expect(view.element.querySelectorAll('input')).toHaveLength(2)
   expect(view.element.querySelector('input[type=password]').closest('label').textContent).toBe('Password')
   expect(view.element.querySelectorAll('button')).toHaveLength(2)
-  expect(view.username.style.borderImageSource).toContain('data:image/svg+xml')
+  expect(view.username.style.borderImageSource).toContain('double-rounded.svg')
   view.dispose()
 })
 

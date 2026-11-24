@@ -19,9 +19,11 @@ Vite writes production files to `dist/`. The development server starts a local M
 ## Layout
 
 - `src/api`: backend contract and web implementation (HTTP status, browser orientation and local username storage).
-- `src/assets`: self-hosted Inter font and its OFL license; `src/styles`: typography and responsive layout.
-- `src/components`: DOM inputs/buttons and color-selectable SVG nine-patch skins.
+- `src/assets`: self-hosted Inter font and its OFL license, plus local SVG/PNG nine-patch artwork; `src/styles`: typography and responsive layout.
+- `src/components`: DOM inputs/buttons and file-selectable nine-patch skins.
 - `src/scenes`: LittleJS scene and browser overlay; `src/utils`: shared scene/error state and pure geometry; `src/fixtures`: JavaScript test data.
 - `mocks`: MSW scenarios, in-memory state, development controls and service worker. See [MOCK_README.md](MOCK_README.md).
 
 The viewport fits within the browser at 9:16 in portrait or 16:9 in landscape; orientation never blocks input. Both buttons require a username and password, save **only** the username locally, and leave the login screen displayed. The password is not saved or restored. Startup loads the last username and checks backend status; errors appear in the form. See [AI_README.md](AI_README.md) for implementation conventions.
+
+Nine-patch borders use bundled images from `src/assets/ninePatch/`. The default is `double-rounded.svg` with a 12-pixel corner slice. Add an SVG or PNG there, then pass its filename and pixel slice to a control's `skin`, for example `Button({ label: 'Play', skin: { image: 'single-rounded.png', slice: 8 } })`. The slice sets the border width and image corner size for that element, independently of other skins; use a slice that fits the image's corners. Optional `background` remains a hex color. Artwork colors are defined in the image, not recolored at runtime. Skin images are bundled locally and cannot point to external URLs.
