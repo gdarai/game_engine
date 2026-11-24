@@ -1,9 +1,10 @@
 import { Button } from '@components/Button.js'
+import { ErrorDialog } from '@components/ErrorDialog.js'
 import { PasswordInput } from '@components/PasswordInput.js'
 import { TextInput } from '@components/TextInput.js'
 import { advanceText } from '@utils/bounce.js'
 import { fitViewport } from '@utils/viewport.js'
-import { getMemory, setError, subscribe } from '@utils/memory.js'
+import { setError } from '@utils/memory.js'
 
 export function createLoginView(backend) {
   const form = document.createElement('form')
@@ -16,22 +17,12 @@ export function createLoginView(backend) {
   const fields = document.createElement('div')
   fields.className = 'form-fields'
   fields.append(username.element, password.element)
-  const error = document.createElement('p')
-  error.className = 'form-error'
-  error.setAttribute('role', 'alert')
   const actions = document.createElement('div')
   actions.className = 'form-actions'
   const login = Button({ label: 'Login', type: 'submit' })
   const create = Button({ label: 'Create' })
   actions.append(login, create)
-  form.append(heading, fields, error, actions)
-
-  const unsubscribe = subscribe((memory) => {
-    error.textContent = memory.error
-    error.hidden = !memory.error
-  })
-  error.textContent = getMemory().error
-  error.hidden = !error.textContent
+  form.append(heading, fields, actions)
 
   function save() {
     const name = username.input.value.trim()
@@ -53,7 +44,7 @@ export function createLoginView(backend) {
   })
   create.addEventListener('click', save)
 
-  return { element: form, username: username.input, password: password.input, dispose: unsubscribe }
+  return { element: form, username: username.input, password: password.input }
 }
 
 export async function startLoginScene({ root, backend, engine, browser = window }) {
@@ -64,7 +55,8 @@ export async function startLoginScene({ root, backend, engine, browser = window 
   const controls = document.createElement('div')
   controls.className = 'browser-layer'
   const view = createLoginView(backend)
-  controls.append(view.element)
+  const errorDialog = ErrorDialog()
+  controls.append(view.element, errorDialog.element)
   viewport.append(canvasRoot, controls)
   root.append(viewport)
 
@@ -123,7 +115,7 @@ export async function startLoginScene({ root, backend, engine, browser = window 
     )
   } catch (error) {
     browser.removeEventListener('resize', resize)
-    view.dispose()
+    errorDialog.dispose()
     viewport.remove()
     throw error
   }
@@ -133,7 +125,7 @@ export async function startLoginScene({ root, backend, engine, browser = window 
     viewport,
     dispose() {
       browser.removeEventListener('resize', resize)
-      view.dispose()
+      errorDialog.dispose()
     },
   }
 }

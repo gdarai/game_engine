@@ -21,17 +21,15 @@ it('renders accessible controls with the bundled SVG skin in the form', () => {
   expect(view.element.querySelector('input[type=password]').closest('label').textContent).toBe('Password')
   expect(view.element.querySelectorAll('button')).toHaveLength(2)
   expect(view.username.style.borderImageSource).toContain('double-rounded.svg')
-  view.dispose()
 })
 
-it('requires both fields and exposes the error to the user', () => {
+it('requires both fields and records the error for the scene dialog', () => {
   const { backend, view } = setup()
   view.username.value = 'Morgan'
   view.element.querySelector('button').click()
   expect(backend.setCredentials).not.toHaveBeenCalled()
-  expect(view.element.querySelector('[role=alert]').textContent).toMatch(/username and password/)
   expect(getMemory().error).toMatch(/username and password/)
-  view.dispose()
+  expect(view.element.querySelector('[role=alert]')).toBeNull()
 })
 
 it.each(['Login', 'Create'])('%s saves only the entered username and remains on login', (label) => {
@@ -42,7 +40,6 @@ it.each(['Login', 'Create'])('%s saves only the entered username and remains on 
   button.click()
   expect(backend.setCredentials).toHaveBeenCalledWith({ username: 'Morgan', password: 'secret' })
   expect(getMemory()).toEqual({ scene: 'login', error: '' })
-  view.dispose()
 })
 
 it('shows storage failures instead of reporting success', () => {
@@ -52,7 +49,6 @@ it('shows storage failures instead of reporting success', () => {
   view.password.value = 'secret'
   view.element.querySelector('button').click()
   expect(getMemory().error).toMatch(/blocked/)
-  view.dispose()
 })
 
 it('uses the orientation to size the LittleJS layer and updates it on resize', async () => {
@@ -80,6 +76,16 @@ it('uses the orientation to size the LittleJS layer and updates it on resize', a
     }),
   }
   const scene = await startLoginScene({ root: document.body, backend, browser, engine })
+  const alert = scene.viewport.querySelector('[role=alert]')
+  expect(alert.closest('.login-form')).toBeNull()
+  expect(alert.parentElement.className).toBe('browser-layer')
+  expect(alert.hidden).toBe(true)
+  scene.view.element.querySelector('button').click()
+  expect(alert.hidden).toBe(false)
+  expect(alert.textContent).toMatch(/username and password/)
+  alert.querySelector('button').click()
+  expect(getMemory().error).toBe('')
+  expect(alert.hidden).toBe(true)
   expect(engine.setCanvasFixedSize).toHaveBeenCalledWith({ x: 400, y: 711 })
   expect(engine.drawTextScreen).toHaveBeenCalledWith('Game Layer', expect.anything(),
     expect.any(Number), undefined, 0, undefined, 'center', 'Inter', '600')
