@@ -1,3 +1,5 @@
+import { fetchJson } from './request.js'
+
 const USERNAME_KEY = 'game-layer.username'
 
 export function createWebBackend(browser = window, fetchRequest = fetch) {
@@ -13,9 +15,7 @@ export function createWebBackend(browser = window, fetchRequest = fetch) {
       browser.localStorage.setItem(USERNAME_KEY, username)
     },
     async getStatus() {
-      const response = await fetchRequest('/api/status')
-      if (!response.ok) throw new Error(`Status request failed (HTTP ${response.status})`)
-      const status = await response.json()
+      const status = await fetchJson('/api/status', fetchRequest)
       if (status?.ok !== true) throw new Error('Invalid status response')
       return status
     },
